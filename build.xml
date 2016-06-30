@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+	
+	<property name="src.dir" location="src"></property>
+	<property name="build.dir" location="build"></property>
+	<property name="build.classes" location="${build.dir}/classes"></property>
+	<property name="build.doc" location="${build.dir}/doc"></property>
+	<property name="zip.dir" location="${build.dir}/zip"></property>
+	<property name="version" value="SNAPSHOT-1.0.1"></property>
+	<property name="zip.name" value="user-${version}.zip"></property>
+	<property name="project.name" value="user-${version}"></property>
+	
+	<target name="clean">
+		<delete dir="${build.dir}"></delete>
+	</target>
+	
+	<target name="init" depends="clean">
+		<echo>初始化文件夹</echo>
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${build.classes}"/>
+		<mkdir dir="${build.doc}"/>
+	</target>
+	
+	<target name="doc" depends="init">
+		<echo>生成api文档</echo>
+		<javadoc sourcepath="${src.dir}" private="true"
+				 packagenames="jlit.ant.*" destdir="${build.doc}"
+				 charset="UTF-8" docencoding="UTF-8" encoding="UTF-8">
+			<classpath path="${build.classes}"></classpath>
+		</javadoc>
+	</target>
+	
+	<target name="zip" depends="doc">
+		<echo>生成zip文件</echo>
+		<zip destfile="${zip.dir}/${zip.name}" duplicate="preserve">
+			<zipfileset dir="${build.doc}" prefix="${project.name}/doc/api"></zipfileset>
+			<zipfileset dir="${src.dir}" prefix="${project.name}/src"></zipfileset>
+		</zip>
+	</target>
+	
+</project>
